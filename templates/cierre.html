@@ -1,0 +1,49 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Cierre de Caja{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/cierre.css' %}">
+{% endblock %}
+{% block content %}
+<div class="content">
+    <h1>CIERRE DE CAJA</h1>
+    <div class="info-cierre">
+        <p>Empleado: {{ user.username }}</p>
+        <p>Fecha: {{ fecha_actual|date:"d/m/Y" }} Hora: {{ fecha_actual|time:"H:i" }}</p>
+        <p>Saldo Inicial: ${{ formulario_cierre.instance.saldo_inicial }}</p>
+        <p>Saldo Final: ${{ saldo_final }}</p>
+    </div>
+    <div class="contenedor-ingresos-egresos">
+        <div class="lista-ingresos">
+            <h2>INGRESOS</h2>
+            <ul>
+                <li>Efectivo: ${{ ventas_efectivo }}</li>
+                <li>Transferencia: ${{ ventas_transferencia }}</li>
+                <li>Tarjeta de Crédito: ${{ ventas_tarjeta_credito }}</li>
+                <li>Tarjeta de Débito: ${{ ventas_tarjeta_debito }}</li>
+            </ul>
+            <p>Movimiento: +${{ dinero_ingreso }}</p>
+            <p>Total Ingresos: ${{ total_ingresos }}</p>
+        </div>
+        <div class="lista-egresos">
+            <h2>EGRESOS</h2>
+            <ul>
+                <li>Efectivo: ${{ compras_efectivo }}</li>
+                <li>Transferencia: ${{ compras_transferencia }}</li>
+                <li>Tarjeta de Débito: ${{ compras_tarjeta_debito }}</li>
+                <li>Gastos: ${{ gastos_compra }}</li>
+            </ul>
+            <p>Movimiento: -${{ dinero_egreso }}</p>
+            <p>Total Egresos: ${{ total_egresos }}</p>
+        </div>
+    </div>
+    <form action="{% url 'cierre' %}" method="POST">
+        {% csrf_token %}
+        <input type="button" onclick="window.location.href='{% url 'menu' %}'" value="Atrás">
+        <input type="submit" value="Cerrar caja">
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/cierre.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %} Ingreso/Egreso de dinero {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/paneliye.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="contenedor-flex">
+        <div class="columna_izquierda card">
+            <form action="{% url 'agregar_dinero' %}" method="POST">
+                {% csrf_token %}
+                <h1>Movimientos</h1>
+                <table>
+                    {{ formulario.as_table }}
+                </table>
+                <input type="submit" value="Agregar movimiento">
+            </form> 
+        </div>
+        <div class="contenido card">
+            <h2><center>INGRESOS Y EGRESOS</center></h2>
+            <table border="1" style="width: 100%;">
+                <tr>
+                    <th>Empleado</th>
+                    <th>Fecha</th>
+                    <th>Ingresos/Monto</th>
+                    <th>Tipo</th>
+                </tr>
+                <tbody>
+                    {% for dinero in lista_dinero %}
+                        <tr>
+                            <td>{{ dinero.empleado }}</td>
+                            <td>{{ dinero.fecha_dinero }}</td>
+                            <td>${{ dinero.ing_egre }}</td>
+                            <td>{{ dinero.tipo_dinero }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

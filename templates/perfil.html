@@ -1,0 +1,29 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %} Perfil del Usuario{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/apertura.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="contenedor card">
+        <h2>Perfil del Usuario</h2>
+        <hr>
+        <div class="perfil-info">
+            <p><strong>Nombre:</strong> {{ empleado.get_full_name }}</p>
+            <p><strong>Username:</strong> {{ empleado.username }}</p>
+            <p><strong>Email:</strong> {{ empleado.email }}</p>
+            <p><strong>Rol:</strong> {% if request.session.is_admin %} Administrador {% else %} Empleado {% endif %}</p>
+        </div>
+        
+        <h3>Cambiar Contraseña</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ cambiar_password.as_p }}
+            <button type="submit" class="btn btn-success" id="btn-cambiar">Cambiar Contraseña</button>
+        </form>
+    </div>
+    <script>const urlLogin="{% url 'login' %}";</script>
+    <script src="{% static 'js/perfil.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}

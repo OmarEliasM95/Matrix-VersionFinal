@@ -1,0 +1,28 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Editar empleado</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'editar_empleado' id_empleado=id_empleado %}" method="POST">
+                {%csrf_token%}
+                <table>
+                    {{ formulario_editar.as_table }}
+                    <td>
+                        <label for="group" class="form-label">Grupo</label>
+                        <select class="form-select" id="group" name="group" required>
+                            <option value="" disabled selected>Seleccione un grupo</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Empleado">Empleado</option>
+                        </select>
+                    </td>
+                </table>
+                <input type="submit" value="Guardar">
+                <input type="button" onclick="window.location.href='{% url 'panel_empleado' %}'" value="Cancelar">
+            </form>
+        </div>
+    </div>
+</div>
+
+

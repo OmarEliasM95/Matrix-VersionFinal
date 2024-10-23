@@ -1,0 +1,91 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %} Empleados{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/empleados.css' %}">
+{% endblock %}
+{% block content %}
+<div class="contenido card">
+    <h1>EMPLEADOS</h1>
+    <div class="fil"> 
+        <input type="text" id="busqueda" placeholder="Buscar empleado..." onkeyup="filtrarEmpleados()">
+        <a href="#" onclick="modal_agregar('{% url 'agregar_empleado' %}')">
+            <i class="bi bi-plus-circle-fill text-success fs-5" title="Agregar"></i> 
+        </a>
+    </div>
+    <div id="resultadoBusqueda">
+        <table id="tablaEmpleados">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Teléfono</th>
+                    <th>E-mail</th>
+                    <th>Dni</th>
+                    <th>Dirección</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleado in page_obj %}
+                    <tr>
+                        <td>{{ empleado.username }}</td>
+                        <td>{{ empleado.first_name }}</td>
+                        <td>{{ empleado.last_name }}</td>
+                        <td>{{ empleado.telefono }}</td>
+                        <td>{{ empleado.email }}</td>
+                        <td>{{ empleado.dni }}</td>
+                        <td>{{ empleado.dirección }}</td>
+                        <td>
+                            <a href="#" onclick="modal_editar('{% url 'editar_empleado' empleado.id %}')">
+                                <i class="bi bi-pencil-square text-primary" title="Editar"></i> 
+                            </a>
+                            <form action="{% url 'eliminar_empleado' empleado.id %}" method="POST" class="acciones">
+                                {% csrf_token %}
+                                <button type="submit" id="btn-borrar">
+                                    <i class="bi bi-trash text-danger" title="Borrar"></i> 
+                                </button>
+                            </form>
+                            <a href="#" onclick="modal_clave('{% url 'cambiar_contraseña' empleado.id %}')">
+                                <i class="bi bi-slash-square text-success " title="Modificar contraseña"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8">No se encontraron empleados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}">anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">siguiente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<div class="modal fade" id="edicion" role="dialog"></div>
+<div class="modal fade" id="agregar" role="dialog"></div>
+<div class="modal fade" id="clave" role="dialog"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/empleados.js' %}"></script>
+{% endblock %}

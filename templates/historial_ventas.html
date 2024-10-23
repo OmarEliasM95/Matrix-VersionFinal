@@ -1,0 +1,35 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %} Historial de Ventas{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/historial_ventas.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="contenedor card">
+        <h2>HISTORIAL DE VENTAS</h2>
+        <table border="1">
+            <tr>
+                <th>ID Venta</th>
+                <th>Empleado</th>
+                <th>Fecha</th>
+                <th>Método de Pago</th>
+                <th>Total Venta</th>
+                <th>Productos Vendidos</th>
+            </tr>
+            <tbody>
+                {% for venta in historial_ventas %}
+                    <tr>
+                        <td>{{venta.id}}</td>
+                        <td>{{venta.empleado.username}}</td>
+                        <td>{{venta.fecha}}</td>
+                        <td>{{venta.get_metodo_pago_display}}</td>
+                        <td>${{venta.total_venta}}</td>
+                        <td><a href="{% url 'ver_detalle_venta' venta.id %}">Ver detalle</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

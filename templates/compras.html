@@ -1,0 +1,80 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %} Compras{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/compras.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="contenedor-flex">
+        <div class="card columna_izquierda">
+            <b>Seleccione Proveedor </b>
+            <form id="Proveedor" action="{% url 'seleccionar_proveedor' %}" method="POST"> 
+                {% csrf_token %}
+                {{formulario_compra.proveedor}}
+                <button type="submit">Confirmar</button>
+            </form>
+               
+            <h2><center>Productos de proveedor: {{formulario_compra.instance.proveedor}}</center></h2>
+            <table border="1" style="width: 100%;">
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Costo</th>
+                    <th>Cantidad</th>
+                </tr>
+                <tbody>
+                    {% for elemento in lista_productos_proveedor %}                
+                        <tr>
+                            <td>{{ elemento.producto.nombre }}</td>
+                            <form action="{% url 'agregar_producto_compra' elemento.producto.id %}" method="POST">
+                                {% csrf_token %}
+                                <td><input type="number" name="precio_compra" style="width: 90%;" required></td>
+                                <td><input type="number" name="cantidad" style="width: 90%;" required></td>
+                                <td><button type="submit">Agregar</button></td>
+                            </form>
+                        </tr>  
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div class="card contenido">
+            <b>Fecha: </b>{{formulario_compra.instance.fecha_compra}} <br>
+            <b>Proveedor: </b>{{compra.proveedor}} <br> 
+            <form id="Formulario" action="{% url 'confirmar_compra' %}" method="POST">
+                {% csrf_token %}
+                <h4>Método de Pago: {{formulario_compra.metodo_pago}}</h4>
+                <h2><center>COMPRA Nº {{compra.id}}</center></h2>
+                <table>
+                    <tr>
+                        <th>Nombre Producto</th>
+                        <th>Cantidad</th>
+                        <th>Costo</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                    <tbody>
+                        {% for producto in lista_compra %}            
+                        <tr>
+                            <td>{{producto.producto.nombre}}</td>
+                            <td>{{producto.cantidad}}</td>
+                            <td>{{producto.precio_de_compra}}</td>
+                            <td>{{producto.subtotal}}</td>
+                            <td>
+                                <form action="{% url 'eliminar_producto_compra' producto.producto.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>  
+                    {% endfor %}    
+                    </tbody>
+                </table>
+                <center>
+                <h3>Total ${{compra.total}}</h3>    
+                <button type="submit">Confirmar</button>
+                </center>
+            </div>
+            </form>
+    </div>
+{% endblock %}

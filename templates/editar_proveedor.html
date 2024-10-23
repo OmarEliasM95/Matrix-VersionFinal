@@ -1,0 +1,19 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Editar Proveedor</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'editar_proveedor' id_proveedor=id_proveedor %}" method="POST">
+                {%csrf_token%}
+                <table>
+                    {{ formulario_editar.as_table }}
+                </table>
+                <input type="submit" value="Guardar">
+                <input type="button" onclick="window.location.href='{% url 'panel_proveedores' %}'" value="Cancelar">
+            </form>
+        </div>
+    </div>
+</div>
+
